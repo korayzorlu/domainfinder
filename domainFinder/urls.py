@@ -20,6 +20,6 @@ from finder.views import index, addRow, deleteRow
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', index, name = "index"),
-    path('add/<str:title>', addRow, name = "addRow"),
+    path('add/<str:name>', addRow, name = "addRow"),
     path('delete/<str:list>', deleteRow, name = "deleteRow"),
 ]

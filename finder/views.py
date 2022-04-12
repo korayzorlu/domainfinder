@@ -4,6 +4,8 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Domain
 
+import requests
+
 # Create your views here.
 @login_required(login_url = "/admin")
 def index(request):
@@ -18,12 +20,12 @@ def index(request):
 
     return render(request, "index.html", context)
 
-def addRow(request, title):
+def addRow(request, name):
 
-    newTitle = title
+    newTitle = name
     article = Domain()
     article.user = request.user
-    article.title = newTitle
+    article.name = newTitle
     article.save()
 
     return redirect("index")
