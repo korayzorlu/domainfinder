@@ -15,7 +15,7 @@
             </button>
             <button class="removeButton" id="allRemove">
                 <i class="fas fa-trash" style="color: #fff;"></i>
-                Seçili Satırları Sil
+                Seçili Adresleri Sil
             </button>
         </div>
         <div class="tableBox">
@@ -31,12 +31,12 @@
                     </tr>
                 </thead>
                 <tbody>
-                    {% for article in articles %}
+                    {% for domain in domains%}
                     <tr class="odd">
                         <td class="select-checkbox"></td>
-                        <td class="articleIdTd">{{ article.id }}</td>
-                        <td>{{ article.name }}</td>
-                        <td>{{ article.created_date }}</td>
+                        <td class="articleIdTd">{{ domain.id }}</td>
+                        <td>{{ domain.name }}</td>
+                        <td>{{ domain.created_date }}</td>
                     </tr>
                     {% endfor %}
                 </tbody>

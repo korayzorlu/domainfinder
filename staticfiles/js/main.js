@@ -46,8 +46,8 @@ $(document).ready( function () {
     //Remove Rows
     $('#allRemove').click( function () {
         Swal.fire({
-            title: 'Satırlar silinsin mi?',
-            text: "Seçili satırlar kalıcı olarak tablodan silinecektir.",
+            title: 'Domain adresleri silinsin mi?',
+            text: "Seçili domain adresleri ve bağlı olduğu subdomain adresleri kalıcı olarak veritabanından silinecektir.",
             icon: 'warning',
             showCancelButton: true,
             confirmButtonColor: '#3085d6',
@@ -66,7 +66,7 @@ $(document).ready( function () {
             }
             Swal.fire(
             'Silindi!',
-            'Satırlar başarıyla silindi.',
+            'Domain adresleri başarıyla silindi.',
             'success'
             )
         }
@@ -75,7 +75,7 @@ $(document).ready( function () {
     //Add Rows
     $('#addRow').click( function () {
         Swal.fire({
-            title: 'Başlık gir',
+            title: 'Domain adresi gir',
             input: 'text',
             inputAttributes: {
               autocapitalize: 'off'
@@ -84,8 +84,11 @@ $(document).ready( function () {
             confirmButtonText: 'Kaydet',
             cancelButtonText: 'Vazgeç',
             showLoaderOnConfirm: true,
-            preConfirm: (title) => {
-              return fetch(`/add/${title}`)
+            preConfirm: (name) => {
+                document.getElementById('swal2-title').innerHTML = 'Subdomain adresleri taranıyor...Bu işlem biraz zaman alabilir.';
+                document.getElementById('swal2-title').style.fontSize = "20px";
+                document.querySelector('.swal2-cancel').style.display = "none";
+              return fetch(`/add/${name}`)
                 .then(response => {
                   if (!response.ok) {
                     throw new Error(response.statusText)
@@ -98,12 +101,14 @@ $(document).ready( function () {
                   )
                 })
             },
-            allowOutsideClick: () => !Swal.isLoading()
+            allowOutsideClick: () => {
+                !Swal.isLoading()
+            }
         }).then((result) => {
         if (result.isConfirmed) {
             Swal.fire(
                 'Başarılı!',
-                'Başlık tabloya eklendi.',
+                'Domain adresleri ve subdomain adresleri veritabanına eklendi.',
                 'success'
                 )
             .then(function(){ 

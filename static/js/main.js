@@ -85,6 +85,9 @@ $(document).ready( function () {
             cancelButtonText: 'Vazgeç',
             showLoaderOnConfirm: true,
             preConfirm: (name) => {
+                document.getElementById('swal2-title').innerHTML = 'Subdomain adresleri taranıyor...Bu işlem biraz zaman alabilir.';
+                document.getElementById('swal2-title').style.fontSize = "20px";
+                document.querySelector('.swal2-cancel').style.display = "none";
               return fetch(`/add/${name}`)
                 .then(response => {
                   if (!response.ok) {
@@ -98,7 +101,9 @@ $(document).ready( function () {
                   )
                 })
             },
-            allowOutsideClick: () => !Swal.isLoading()
+            allowOutsideClick: () => {
+                !Swal.isLoading()
+            }
         }).then((result) => {
         if (result.isConfirmed) {
             Swal.fire(
