@@ -10,3 +10,6 @@ class Domain(models.Model):
 class Subdomain(models.Model):
     domain = models.ForeignKey(Domain, on_delete = models.CASCADE, related_name = "subdomains")
     name = models.CharField(max_length = 500, blank =True, null = True)
+
+    def __str__(self):
+        return self.name

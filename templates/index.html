@@ -12,7 +12,7 @@
         <div class="buttonBox">
             <button class="addButton" id="addRow">
                 <i class="fas fa-solid fa-plus" style="color: #fff;"></i>
-                Domain Eklee
+                Domain Ekle
             </button>
             <button class="removeButton" id="allRemove">
                 <i class="fas fa-trash" style="color: #fff;"></i>
@@ -28,6 +28,7 @@
                         </th>
                         <th class="articleIdTh">ID</th>
                         <th>Domain Adı</th>
+                        <th>Subdomain</th>
                         <th>Eklenme Tarihi</th>
                     </tr>
                 </thead>
@@ -37,6 +38,12 @@
                         <td class="select-checkbox"></td>
                         <td class="articleIdTd">{{ domain.id }}</td>
                         <td>{{ domain.name }}</td>
+                        <td>
+                            <button class="subList" id="subList">
+                                <i class="fas fa-solid fa-list" style="color: #fff;"></i>
+                                Subdomain Listesi
+                            </button>
+                        </td>
                         <td>{{ domain.created_date }}</td>
                     </tr>
                     {% endfor %}

@@ -117,4 +117,27 @@ $(document).ready( function () {
         }
         })
     } );
+    //Subdomain List
+    $('#subList').click( function () {
+        Swal.fire({
+            title: 'Domain adresleri silinsin mi?',
+            text: "Seçili domain adresleri ve bağlı olduğu subdomain adresleri kalıcı olarak veritabanından silinecektir.",
+        }).then((result) => {
+        if (result.isConfirmed) {
+            var dataArr = [];
+            $.each($("#dataTable tr.selected"),function(){
+                dataArr.push($(this).find('td').eq(1).text()); 
+            });
+            table.rows('.selected').remove().draw( false );
+            for (let i = 0; i < dataArr.length; i++) {
+                window.location = "/delete/"+dataArr;
+            }
+            Swal.fire(
+            'Silindi!',
+            'Domain adresleri başarıyla silindi.',
+            'success'
+            )
+        }
+        })
+    } );
 } );

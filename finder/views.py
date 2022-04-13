@@ -47,7 +47,6 @@ class DomainViewSet(viewsets.ReadOnlyModelViewSet, viewsets.GenericViewSet):
             content_list.append(content)
 
         return queryset
-    
 
 # Create your views here.
 @login_required(login_url = "/admin")
