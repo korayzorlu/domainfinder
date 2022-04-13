@@ -20,7 +20,7 @@ from rest_framework.decorators import api_view, permission_classes
 from django_filters.rest_framework import DjangoFilterBackend
 
 class DomainViewSet(viewsets.ReadOnlyModelViewSet, viewsets.GenericViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     queryset = Domain.objects.all()
     serializer_class = DomainSerializer

@@ -118,10 +118,10 @@ $(document).ready( function () {
         })
     } );
     //Subdomain List
+    /*
     $('#subList').click( function () {
         Swal.fire({
-            title: 'Domain adresleri silinsin mi?',
-            text: "Seçili domain adresleri ve bağlı olduğu subdomain adresleri kalıcı olarak veritabanından silinecektir.",
+            html: "<h3>baslık</h3>",
         }).then((result) => {
         if (result.isConfirmed) {
             var dataArr = [];
@@ -139,5 +139,5 @@ $(document).ready( function () {
             )
         }
         })
-    } );
+    } );*/
 } );

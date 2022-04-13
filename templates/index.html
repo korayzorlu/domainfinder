@@ -39,7 +39,8 @@
                         <td class="articleIdTd">{{ domain.id }}</td>
                         <td>{{ domain.name }}</td>
                         <td>
-                            <button class="subList" id="subList">
+                            <button class="subList" id="subList"
+                                onclick="subFunction('{{ domain.name }}', '{{ request.get_host}}')">
                                 <i class="fas fa-solid fa-list" style="color: #fff;"></i>
                                 Subdomain Listesi
                             </button>
@@ -55,5 +56,27 @@
         </div>
     </div>
 </div>
+
+<script>
+    function subFunction(dom, host) {
+        //var myObject = {'username': 'admin', 'password': 'administration'};
+        //$.getJSON('http://' + host + 'restapi/domains/?name=google.com', myObject, function(data) {});
+        $.ajax({
+            type: "GET",
+            url: "http://" + host + "/restapi/domains/?type=json&name=" + dom,
+            data: { get_param: 'value' },
+            dataType: 'json',
+            success: function (data) { 
+                Swal.fire({html:data["results"][0]["subdomains"]})
+            },
+            error: function(error){
+                console.log("Error:");
+                console.log(error);
+            }
+        });
+        //Swal.fire({html:dom})
+    };
+    
+</script>
 
 {% endblock  %}
