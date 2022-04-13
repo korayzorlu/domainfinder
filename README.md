@@ -1,5 +1,5 @@
 # Domain Finder
-This is a test project
+This is a test project.
 
 # Installation & Usage
 ```bash
