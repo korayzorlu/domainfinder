@@ -1,3 +1,4 @@
+from django import views
 from django.shortcuts import redirect, render, HttpResponse, get_object_or_404
 from django.contrib.auth import login, authenticate
 from django.contrib.auth.decorators import login_required
@@ -18,18 +19,17 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view, permission_classes
 from django_filters.rest_framework import DjangoFilterBackend
 
-class DomainViewSet(viewsets.ReadOnlyModelViewSet):
+class DomainViewSet(viewsets.ReadOnlyModelViewSet, viewsets.GenericViewSet):
     permission_classes = [IsAuthenticated]
 
-    queryset = Domain.objects.all().order_by('name')
+    queryset = Domain.objects.all()
     serializer_class = DomainSerializer
+    filter_backends = [DjangoFilterBackend]
+    filterset_fields = ["name"]
     
-
-    def list(self, request):
-        queryset = Domain.objects.filter(user = request.user).order_by('name')
+    def get_queryset(self):
+        queryset = Domain.objects.all()
         serializer_class = DomainSerializer
-        filter_backends = [DjangoFilterBackend]
-        filterset_fields = ['domainName']
 
         content_list = []
         
@@ -46,14 +46,15 @@ class DomainViewSet(viewsets.ReadOnlyModelViewSet):
                 content["subdomains"] = []
             content_list.append(content)
 
-        return Response(content_list)
+        return queryset
+    
 
 # Create your views here.
 @login_required(login_url = "/admin")
 def index(request):
     domains = Domain.objects.filter(user = request.user)
     
-    dd = requests.get("http://127.0.0.1:8000/restapi/domains/",auth=HTTPBasicAuth('admin', 'administration')).json()
+    dd = requests.get("http://" + request.get_host() + "/restapi/domains/?name=google.com",auth=HTTPBasicAuth('admin', 'administration')).json()
     print(dd)
     i = 0
 

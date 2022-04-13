@@ -17,7 +17,6 @@ from django.urls import path
 from django.urls.conf import include
 
 from finder.views import index, addRow, deleteRow, subdomainIndex,DomainViewSet
-
 from django.contrib.auth.models import User
 from rest_framework import serializers, viewsets, routers
 from django.contrib.auth import views as auth_views
