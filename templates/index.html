@@ -67,7 +67,10 @@
             data: { get_param: 'value' },
             dataType: 'json',
             success: function (data) { 
-                Swal.fire({html:data["results"][0]["subdomains"]})
+                Swal.fire({
+                    html:data["results"][0]["subdomains"],
+                    confirmButtonText: 'Kapat',
+                })
             },
             error: function(error){
                 console.log("Error:");
