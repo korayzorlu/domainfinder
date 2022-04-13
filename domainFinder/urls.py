@@ -16,7 +16,7 @@ from django.contrib import admin
 from django.urls import path
 from django.urls.conf import include
 
-from finder.views import index, addRow, deleteRow, subdomainIndex,DomainViewSet
+from finder.views import index, addRow, deleteRow, DomainViewSet
 from django.contrib.auth.models import User
 from rest_framework import serializers, viewsets, routers
 from django.contrib.auth import views as auth_views
@@ -44,7 +44,6 @@ urlpatterns = [
     path('', index, name = "index"),
     path('add/<str:name>', addRow, name = "addRow"),
     path('delete/<str:list>', deleteRow, name = "deleteRow"),
-    path('detail/<int:id>', subdomainIndex, name = "detail"),
     path('restapi/', include(router.urls)),
     path('api-auth/', include('rest_framework.urls', namespace='rest_framework')),
 ]

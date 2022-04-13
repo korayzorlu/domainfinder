@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 
 from .models import Domain, Subdomain
 
+import whois
 import requests
 import json
 from requests.auth import HTTPBasicAuth
@@ -36,6 +37,10 @@ class DomainViewSet(viewsets.ReadOnlyModelViewSet, viewsets.GenericViewSet):
         for query in queryset:
             content = {}
             content["domainName"] = query.name
+            content["domainCreationDate"] = query.creation_date
+            content["domainExpirationDate"] = query.expiration_date
+            content["domainNameServers"] = query.name_servers
+            content["domainRegistrantName"] = query.registrant_name
             subdomainset = Subdomain.objects.filter(domain = query)
             subdomain_list = []
             if subdomainset:
@@ -64,36 +69,27 @@ def index(request):
 
     return render(request, "index.html", context)
 
-@login_required(login_url = "/admin")
-def subdomainIndex(request, id):
-    domains = Domain.objects.filter(user = request.user)
-    domain = get_object_or_404(Domain, id = id)
-
-    subdomains = Subdomain.objects.filter(domain = domain)
-
-    i = 0
-
-    context = {
-                "domains" : domains,
-                "i" : i
-            }
-
-    return render(request, "index.html", context)
 
 def addRow(request, name):
-    os.system("ls")
     newDomain = name
     domain = Domain()
     domain.user = request.user
     domain.name = newDomain
+    try:
+        w = whois.whois(name)
+        domain.creation_date = str(w["creation_date"])
+        domain.expiration_date = str(w["expiration_date"])
+        domain.name_servers = str(w["name_servers"])
+        if w.registrant_name:
+            domain.registrant_name = w["registrant_name"]
+        else:
+            domain.registrant_name = ""
+    except:
+        pass
     domain.save()
     
     def domain_scanner(domain_name,sub_domnames):
-        #print('----URL after scanning subdomains----')
-        i = 0
-
         for subdomain in sub_domnames:
-            i = i + 1
             url = f"https://{subdomain}.{domain_name}"
 
             try:
@@ -103,8 +99,8 @@ def addRow(request, name):
                 subdomain2.name = newSubdomain
                 subdomain2.domain = domain
                 subdomain2.save()
-                #print(str(i) + str(url))
-            except requests.ConnectionError:
+                print(url)
+            except:
                 pass
 
     dom_name = name

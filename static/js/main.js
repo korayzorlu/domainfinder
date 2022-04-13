@@ -117,27 +117,103 @@ $(document).ready( function () {
         }
         })
     } );
-    //Subdomain List
-    /*
-    $('#subList').click( function () {
-        Swal.fire({
-            html: "<h3>baslık</h3>",
-        }).then((result) => {
-        if (result.isConfirmed) {
-            var dataArr = [];
-            $.each($("#dataTable tr.selected"),function(){
-                dataArr.push($(this).find('td').eq(1).text()); 
-            });
-            table.rows('.selected').remove().draw( false );
-            for (let i = 0; i < dataArr.length; i++) {
-                window.location = "/delete/"+dataArr;
-            }
-            Swal.fire(
-            'Silindi!',
-            'Domain adresleri başarıyla silindi.',
-            'success'
-            )
-        }
-        })
-    } );*/
 } );
+
+//Subdomain List
+function subFunction(dom, host) {
+    $.ajax({
+        type: "GET",
+        url: "http://" + host + "/restapi/domains/?type=json&name=" + dom,
+        data: { get_param: 'value' },
+        dataType: 'json',
+        success: function (data) { 
+            if( data["results"][0]["subdomains"].length === 0){
+                Swal.fire({
+                    html: "Subdomain Bulunamadı.",
+                    confirmButtonText: 'Kapat'
+                })
+            }
+            else{
+                var htmlData = document.createElement("ul");
+                let nodes = data["results"][0]["subdomains"].map(lang => {
+                    let li = document.createElement('li');
+                    li.innerHTML= lang;
+                    return li;
+                });
+                htmlData.append(...nodes);
+                Swal.fire({
+                    html: htmlData,
+                    confirmButtonText: 'Kapat'
+                })
+            }
+        },
+        error: function(error){
+            console.log("Error:");
+            console.log(error);
+        }
+    });
+};
+
+//Name Servers List
+function nsFunction(dom, host) {
+    $.ajax({
+        type: "GET",
+        url: "http://" + host + "/restapi/domains/?type=json&name=" + dom,
+        data: { get_param: 'value' },
+        dataType: 'json',
+        success: function (data) { 
+            if( data["results"][0]["name_servers"] === "None"){
+                Swal.fire({
+                    html: "Name Servers Bulunamadı.",
+                    confirmButtonText: 'Kapat'
+                })
+            }
+            else{
+                var htmlData = document.createElement("ul");
+                let li = document.createElement('li');
+                li.innerHTML= data["results"][0]["name_servers"];
+                htmlData.append(li);
+                Swal.fire({
+                    html: htmlData,
+                    confirmButtonText: 'Kapat'
+                })
+            }
+        },
+        error: function(error){
+            console.log("Error:");
+            console.log(error);
+        }
+    });
+};
+
+//Registrant Name
+function nsFunction(dom, host) {
+    $.ajax({
+        type: "GET",
+        url: "http://" + host + "/restapi/domains/?type=json&name=" + dom,
+        data: { get_param: 'value' },
+        dataType: 'json',
+        success: function (data) { 
+            if( data["results"][0]["registrant_name"] === ""){
+                Swal.fire({
+                    html: "Registrant Name Bulunamadı.",
+                    confirmButtonText: 'Kapat'
+                })
+            }
+            else{
+                var htmlData = document.createElement("ul");
+                let li = document.createElement('li');
+                li.innerHTML= data["results"][0]["registrant_name"];
+                htmlData.append(li);
+                Swal.fire({
+                    html: htmlData,
+                    confirmButtonText: 'Kapat'
+                })
+            }
+        },
+        error: function(error){
+            console.log("Error:");
+            console.log(error);
+        }
+    });
+};

@@ -1,6 +1,6 @@
 # importing module
 import requests
-
+"""
 # function for scanning subdomains
 def domain_scanner(domain_name,sub_domnames):
 	print('----URL after scanning subdomains----')
@@ -45,3 +45,17 @@ if __name__ == '__main__':
 	# and getting the url
 	domain_scanner(dom_name,sub_dom)
 	
+"""
+
+import whois
+w = whois.whois('maximaintegration.com')
+print(w)
+
+print(w["domain_name"])
+print(w["creation_date"])
+print(w["expiration_date"])
+print(str(w["name_servers"]))
+if w.registrant_name:
+	print(w["registrant_name"])
+else:
+	print("boş")
