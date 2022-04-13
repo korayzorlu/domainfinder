@@ -1,7 +1,7 @@
 # Domain Finder
 This is a test project
 
-# Installation
+# Installation & Usage
 ```bash
 $ mkdir ~/newproject
 
