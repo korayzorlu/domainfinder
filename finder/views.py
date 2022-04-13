@@ -5,11 +5,71 @@ from django.contrib.auth.decorators import login_required
 from .models import Domain, Subdomain
 
 import requests
+import json
+from requests.auth import HTTPBasicAuth
+
+import os
+
+from .serializers import DomainSerializer
+
+from rest_framework import viewsets
+from rest_framework.permissions import IsAuthenticated, AllowAny
+from rest_framework.response import Response
+from rest_framework.decorators import api_view, permission_classes
+from django_filters.rest_framework import DjangoFilterBackend
+
+class DomainViewSet(viewsets.ReadOnlyModelViewSet):
+    permission_classes = [IsAuthenticated]
+
+    queryset = Domain.objects.all().order_by('name')
+    serializer_class = DomainSerializer
+    
+
+    def list(self, request):
+        queryset = Domain.objects.filter(user = request.user).order_by('name')
+        serializer_class = DomainSerializer
+        filter_backends = [DjangoFilterBackend]
+        filterset_fields = ['domainName']
+
+        content_list = []
+        
+        for query in queryset:
+            content = {}
+            content["domainName"] = query.name
+            subdomainset = Subdomain.objects.filter(domain = query)
+            subdomain_list = []
+            if subdomainset:
+                for subdomain in subdomainset:
+                    subdomain_list.append(subdomain.name)
+                content["subdomains"] = subdomain_list
+            else:
+                content["subdomains"] = []
+            content_list.append(content)
+
+        return Response(content_list)
 
 # Create your views here.
 @login_required(login_url = "/admin")
 def index(request):
     domains = Domain.objects.filter(user = request.user)
+    
+    dd = requests.get("http://127.0.0.1:8000/restapi/domains/",auth=HTTPBasicAuth('admin', 'administration')).json()
+    print(dd)
+    i = 0
+
+    context = {
+                "domains" : domains,
+                "i" : i
+            }
+
+    return render(request, "index.html", context)
+
+@login_required(login_url = "/admin")
+def subdomainIndex(request, id):
+    domains = Domain.objects.filter(user = request.user)
+    domain = get_object_or_404(Domain, id = id)
+
+    subdomains = Subdomain.objects.filter(domain = domain)
 
     i = 0
 
@@ -21,6 +81,7 @@ def index(request):
     return render(request, "index.html", context)
 
 def addRow(request, name):
+    os.system("ls")
     newDomain = name
     domain = Domain()
     domain.user = request.user
