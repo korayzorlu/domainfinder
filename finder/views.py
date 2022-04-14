@@ -58,8 +58,6 @@ class DomainViewSet(viewsets.ReadOnlyModelViewSet, viewsets.GenericViewSet):
 def index(request):
     domains = Domain.objects.filter(user = request.user)
     
-    dd = requests.get("http://" + request.get_host() + "/restapi/domains/?name=google.com",auth=HTTPBasicAuth('admin', 'administration')).json()
-    print(dd)
     i = 0
 
     context = {
