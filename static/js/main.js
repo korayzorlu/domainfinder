@@ -187,7 +187,7 @@ function nsFunction(dom, host) {
 };
 
 //Registrant Name
-function nsFunction(dom, host) {
+function rnFunction(dom, host) {
     $.ajax({
         type: "GET",
         url: "http://" + host + "/restapi/domains/?type=json&name=" + dom,
